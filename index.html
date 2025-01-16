@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning Wheel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 5px solid #333;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ffcccb 0 36deg, 
+                #f4ffb8 36deg 72deg, 
+                #ccffcc 72deg 108deg,
+                #b8ffff 108deg 144deg,
+                #ccb8ff 144deg 180deg,
+                #ffcccb 180deg 216deg,
+                #f4ffb8 216deg 252deg,
+                #ccffcc 252deg 288deg,
+                #b8ffff 288deg 324deg,
+                #ccb8ff 324deg 360deg
+            );
+        }
+
+        .spin-button {
+            position: absolute;
+            top: calc(50% - 30px);
+            left: calc(50% - 30px);
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            border: 3px solid #333;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .results {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        @keyframes rain-poop {
+            from { transform: translateY(-100vh); opacity: 1; }
+            to { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .poop {
+            position: fixed;
+            top: -50px;
+            font-size: 32px;
+            animation: rain-poop 2s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="wheel-container">
+        <div class="spin-button" onclick="spinWheel()">Spin</div>
+    </div>
+    <div class="results" id="results"></div>
+
+    <script>
+        const vegetables = [
+            { name: "Carrot", emoji: "🥕" },
+            { name: "Broccoli", emoji: "🥦" },
+            { name: "Corn", emoji: "🌽" },
+            { name: "Tomato", emoji: "🍅" },
+            { name: "Eggplant", emoji: "🍆" },
+            { name: "Cucumber", emoji: "🥒" },
+            { name: "Pepper", emoji: "🌶️" },
+            { name: "Potato", emoji: "🥔" },
+            { name: "Mushroom", emoji: "🍄" },
+            { name: "Onion", emoji: "🧅" }
+        ];
+
+        function spinWheel() {
+            const result = vegetables[Math.floor(Math.random() * vegetables.length)];
+            const resultsDiv = document.getElementById('results');
+
+            // Clear previous poop animations
+            document.querySelectorAll('.poop').forEach(poop => poop.remove());
+
+            // Show result
+            resultsDiv.textContent = `${result.emoji} ${result.name}`;
+
+            // Trigger poop emoji rain
+            for (let i = 0; i < 20; i++) {
+                const poop = document.createElement('div');
+                poop.textContent = "💩";
+                poop.className = 'poop';
+                poop.style.left = Math.random() * 100 + 'vw';
+                poop.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(poop);
+
+                // Remove poop after animation
+                poop.addEventListener('animationend', () => poop.remove());
+            }
+        }
+    </script>
+</body>
+</html>
