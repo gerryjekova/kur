@@ -64,10 +64,10 @@
             to { transform: translateY(100vh); opacity: 0; }
         }
 
-        .poop {
+        .vegetable {
+            font-size: 32px;
             position: fixed;
             top: -50px;
-            font-size: 32px;
             animation: rain-poop 2s linear infinite;
         }
     </style>
@@ -92,35 +92,50 @@
             { name: "Onion", emoji: "🧅" }
         ];
 
+        let isSpinning = false; // Prevent multiple spins at once
+
         function spinWheel() {
+            if (isSpinning) return;  // Prevent another spin while one is in progress
+            isSpinning = true; // Lock the spinning
+
             const wheel = document.getElementById('wheel');
             const resultsDiv = document.getElementById('results');
-            const randomRotation = Math.floor(Math.random() * 360 + 360 * 5); // 5 full spins + random
-            const selectedIndex = Math.floor((randomRotation % 360) / (360 / vegetables.length));
+            
+            // Randomly select a vegetable
+            const selectedIndex = Math.floor(Math.random() * vegetables.length);
             const result = vegetables[selectedIndex];
+
+            // Calculate the rotation to stop at the vegetable's position
+            const degreesPerSection = 360 / vegetables.length;
+            const randomRotation = Math.floor(Math.random() * 360 + 360 * 5); // 5 full spins + random
 
             // Set the wheel's rotation
             wheel.style.transform = `rotate(${randomRotation}deg)`;
 
-            // Clear previous poop animations
-            document.querySelectorAll('.poop').forEach(poop => poop.remove());
+            // Clear previous vegetable rain
+            document.querySelectorAll('.vegetable').forEach(poop => poop.remove());
 
             // Show result after the spin ends
             setTimeout(() => {
                 resultsDiv.textContent = `${result.emoji} ${result.name}`;
 
-                // Trigger poop emoji rain
+                // Trigger vegetable rain based on the result
                 for (let i = 0; i < 20; i++) {
-                    const poop = document.createElement('div');
-                    poop.textContent = "💩";
-                    poop.className = 'poop';
-                    poop.style.left = Math.random() * 100 + 'vw';
-                    poop.style.animationDuration = (Math.random() * 2 + 1) + 's';
-                    document.body.appendChild(poop);
+                    const veggieRain = document.createElement('div');
+                    veggieRain.textContent = result.emoji;
+                    veggieRain.className = 'vegetable';
+                    veggieRain.style.left = Math.random() * 100 + 'vw';
+                    veggieRain.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                    document.body.appendChild(veggieRain);
 
-                    // Remove poop after animation
-                    poop.addEventListener('animationend', () => poop.remove());
+                    // Remove veggie after animation
+                    veggieRain.addEventListener('animationend', () => veggieRain.remove());
                 }
+
+                // Allow the next spin after the animation duration (4s)
+                setTimeout(() => {
+                    isSpinning = false; // Re-enable spinning
+                }, 4000); // Match the spin duration
             }, 4000); // Wait for the spin animation to complete
         }
     </script>
