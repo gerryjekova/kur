@@ -33,6 +33,7 @@
                 #b8ffff 288deg 324deg,
                 #ccb8ff 324deg 360deg
             );
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
 
         .spin-button {
@@ -72,7 +73,7 @@
     </style>
 </head>
 <body>
-    <div class="wheel-container">
+    <div class="wheel-container" id="wheel">
         <div class="spin-button" onclick="spinWheel()">Spin</div>
     </div>
     <div class="results" id="results"></div>
@@ -92,27 +93,35 @@
         ];
 
         function spinWheel() {
-            const result = vegetables[Math.floor(Math.random() * vegetables.length)];
+            const wheel = document.getElementById('wheel');
             const resultsDiv = document.getElementById('results');
+            const randomRotation = Math.floor(Math.random() * 360 + 360 * 5); // 5 full spins + random
+            const selectedIndex = Math.floor((randomRotation % 360) / (360 / vegetables.length));
+            const result = vegetables[selectedIndex];
+
+            // Set the wheel's rotation
+            wheel.style.transform = `rotate(${randomRotation}deg)`;
 
             // Clear previous poop animations
             document.querySelectorAll('.poop').forEach(poop => poop.remove());
 
-            // Show result
-            resultsDiv.textContent = `${result.emoji} ${result.name}`;
+            // Show result after the spin ends
+            setTimeout(() => {
+                resultsDiv.textContent = `${result.emoji} ${result.name}`;
 
-            // Trigger poop emoji rain
-            for (let i = 0; i < 20; i++) {
-                const poop = document.createElement('div');
-                poop.textContent = "💩";
-                poop.className = 'poop';
-                poop.style.left = Math.random() * 100 + 'vw';
-                poop.style.animationDuration = (Math.random() * 2 + 1) + 's';
-                document.body.appendChild(poop);
+                // Trigger poop emoji rain
+                for (let i = 0; i < 20; i++) {
+                    const poop = document.createElement('div');
+                    poop.textContent = "💩";
+                    poop.className = 'poop';
+                    poop.style.left = Math.random() * 100 + 'vw';
+                    poop.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                    document.body.appendChild(poop);
 
-                // Remove poop after animation
-                poop.addEventListener('animationend', () => poop.remove());
-            }
+                    // Remove poop after animation
+                    poop.addEventListener('animationend', () => poop.remove());
+                }
+            }, 4000); // Wait for the spin animation to complete
         }
     </script>
 </body>
