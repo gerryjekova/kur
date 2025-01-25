@@ -50,7 +50,7 @@
     <script>
         // Countdown timer logic
         const timerElement = document.getElementById('timer');
-        let countdownTime = 11 * 60 * 60 + 29 * 60; // 11 hours and 35 minutes in seconds
+        let countdownTime = 11 * 60 * 60 + 27 * 60; // 11 hours and 35 minutes in seconds
 
         function updateTimer() {
             const hours = Math.floor(countdownTime / 3600);
@@ -77,7 +77,7 @@
             const rooster = document.createElement('div');
             rooster.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             rooster.classList.add('rooster');
-            rooster.style.left = `${Math.random() * 100}vw`;
+            rooster.style.left = `${Math.random() * 1}vw`;
             rooster.style.setProperty('--randomX', Math.random() - 0.5);
             body.appendChild(rooster);
 
