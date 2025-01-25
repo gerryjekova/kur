@@ -27,30 +27,30 @@
         }
         .rooster {
             position: absolute;
-            top: -50px;
+            top: 50vh;
             font-size: 2rem;
-            animation: fall 5s linear infinite;
+            color: white;
+            animation: fadeAway 2s forwards;
         }
-        @keyframes fall {
+        @keyframes fadeAway {
             0% {
-                top: -50px;
-                transform: translateX(0);
+                opacity: 1;
             }
             100% {
-                top: 110vh;
-                transform: translateX(calc(100vw * var(--randomX)));
+                opacity: 0;
+                transform: translateY(-50px);
             }
         }
     </style>
 </head>
 <body>
     <h1>Countdown Timer</h1>
-    <div id="timer">11:35:00</div>
+    <div id="timer">08:10:00</div>
 
     <script>
         // Countdown timer logic
         const timerElement = document.getElementById('timer');
-        let countdownTime = 11 * 60 * 60 + 13 * 60; // 11 hours and 35 minutes in seconds
+        let countdownTime = (8 * 60 * 60 + 10 * 60); // 8 hours and 10 minutes in seconds
 
         function updateTimer() {
             const hours = Math.floor(countdownTime / 3600);
@@ -69,7 +69,7 @@
         const timerInterval = setInterval(updateTimer, 1000);
         updateTimer();
 
-        // Rooster rain logic
+        // Rooster spawn logic
         const emojis = ['🐓'];
         const body = document.body;
 
@@ -77,16 +77,17 @@
             const rooster = document.createElement('div');
             rooster.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             rooster.classList.add('rooster');
-            rooster.style.left = `${Math.random() * 1}vw`;
-            rooster.style.setProperty('--randomX', Math.random() - 0.5);
+            rooster.style.left = `${Math.random() * 100}vw`; // Random horizontal position
             body.appendChild(rooster);
 
+            // Remove the rooster after animation
             rooster.addEventListener('animationend', () => {
                 rooster.remove();
             });
         }
 
-        setInterval(createRooster, 6000);
+        // Spawn a rooster every second based on timer tick
+        const roosterInterval = setInterval(createRooster, 1000); // Spawn rooster every second
     </script>
 </body>
 </html>
